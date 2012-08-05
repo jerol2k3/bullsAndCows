@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+	<title>Bulls And Cows</title>
+</head>
+<body>
+	<a href=".">New Game</a>
+	<h1>Bulls And Cows</h1>
+	<p>Guess is {{ ans }}.</p>
+	<p>History</p>
+	<ul>
+	{% for answer in history %}
+	<li> {{ answer }} - {{ answer }} </li>
+	{% endfor %}	
+	</ul>
+	<form action="." method="POST">{% csrf_token %}				
+		<table>
+			{{ form.as_table }}
+		</table>
+		<p><input type="submit" value="Submit"></p>		
+	</form>
+</body>
+</html>
