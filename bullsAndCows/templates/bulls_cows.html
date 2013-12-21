@@ -6,18 +6,28 @@
 <body>
 	<a href=".">New Game</a>
 	<h1>Bulls And Cows</h1>
-	<p>Guess is {{ ans }}.</p>
+	{% if not found %}
+		<p>Guess is {{ ans|join:"" }}.</p>
+	{% endif %}
 	<p>History</p>
-	<ul>
-	{% for answer in history %}
-	<li> {{ answer }} - {{ answer }} </li>
+	<ul>		
+	{% for guess in history %}
+		<li> {{ guess.ans|join:"" }} - {{ guess.score|join:"," }} </li>
 	{% endfor %}	
-	</ul>
-	<form action="." method="POST">{% csrf_token %}				
-		<table>
-			{{ form.as_table }}
-		</table>
-		<p><input type="submit" value="Submit"></p>		
+	</ul>	
+	<form action="." method="post">{% csrf_token %}				
+		{% if found %}						
+			<p>Final answer in Guess {{ history|length }}  is {{ ans|join:"" }}.</p>														
+		{% else %}
+			{% if error %}
+				<p>Bad scoring? nothing fits those scores you gave.</p>
+			{% else %}	
+				<table>
+					{{ form.as_table }}
+				</table>
+				<p><input type="submit" value="Submit"></p>	
+			{% endif %}	
+		{% endif %}		
 	</form>
 </body>
 </html>

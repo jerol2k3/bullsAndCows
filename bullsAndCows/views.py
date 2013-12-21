@@ -26,43 +26,45 @@ def bulls_cows(request):
         form = BullsCowsForm(request.POST)
         score = (int(request.POST['bulls']), int(request.POST['cows'])) 
         request.session["scores"].append(score)
-        choices = request.session["choices"]       
-        if len(choices) > 1: 
-            choices = [c for c in choices if highestPointers(c, request.session["ans"]) == score]
-        request.session["choices"] = choices
-        shuffle(request.session["choices"])
-        request.session["ans"] = request.session["choices"][0]
-        
-        for choice in request.session["choices"]:
-            if len(set(choice)) == 4:
-                request.session["ans"] = choice
-                break
-            
-        request.session["answers"].append(request.session["ans"])
-        
-        request.session["history"] = {}
-        request.session["history"]["answers"] = request.session["answers"]
-        request.session["history"]["scores"] = request.session["scores"]
-        
+        request.session["history"].append({'ans': request.session["ans"], 'score': score})
+        choices = request.session["choices"] 
+        if len(choices) > 0:       
+            choices = [c for c in choices if highestPointers(c, request.session["ans"]) == score]            
+            request.session["choices"] = choices
+            shuffle(request.session["choices"])
+        if len(choices) > 0:
+            request.session["ans"] = choices[0]
+            for choice in choices:
+                if len(set(choice)) == 4:
+                    request.session["ans"] = choice
+                    break
+            request.session["answers"].append(request.session["ans"])
+        found = score == (size, 0)
+        if(len(choices)) == 1 and not found:
+            request.session["history"].append({'ans': request.session["ans"], 'score': (4,0)})            
+            found = True
+        error = False
+        if len(choices) == 0:
+            error = True
         csrfContext = RequestContext(request, {'form': form, 
             'ans': request.session["ans"],
-            'history': request.session["history"]})
+            'history': request.session["history"],
+            'found': found,
+            'error': error})
         return render_to_response("bulls_cows.html", csrfContext)
-    
     else:        
         form = BullsCowsForm()
         request.session["choices"] = list(product(digits, repeat=size))
         shuffle(request.session["choices"])
         request.session["answers"] = []
         request.session["scores"]  = []
-        request.session["ans"] = request.session["choices"][0] 
-        
+        request.session["history"]  = []
+        request.session["ans"] = request.session["choices"][0]  
         for choice in request.session["choices"]:
             if len(set(choice)) == 4:
                 request.session["ans"] = choice
-                break       
-               
-        request.session["answers"].append(request.session["ans"])
+                break      
+        request.session["answers"].append(request.session["ans"])        
         csrfContext = RequestContext(request, {'form': form, 'ans': request.session["ans"]})
         return render_to_response('bulls_cows.html', csrfContext)
     
