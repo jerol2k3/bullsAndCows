@@ -157,3 +157,5 @@ LOGGING = {
         },
     }
 }
+
+ALLOWED_HOSTS = ['bullsandcows.herokuapp.com']
