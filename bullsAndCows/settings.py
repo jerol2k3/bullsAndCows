@@ -158,4 +158,4 @@ LOGGING = {
     }
 }
 
-ALLOWED_HOSTS = ['bullsandcows.herokuapp.com']
+ALLOWED_HOSTS = ['bullsandcows.herokuapp.com', '127.0.0.1']

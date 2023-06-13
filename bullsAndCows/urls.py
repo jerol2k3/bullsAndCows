@@ -16,7 +16,7 @@ urlpatterns = [
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-    re_path(r'^$', 'bullsAndCows.views.bulls_cows', name='home'),
+    re_path(r'^$', bulls_cows, name='home'),
     re_path(r'^time/$', current_datetime),
     re_path(r'^time/plus/(\d+)/$', hours_ahead),
     re_path(r'^bulls_cows/$', bulls_cows)
