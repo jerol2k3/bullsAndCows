@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.http import HttpResponse
 import datetime
 from bullsAndCows.forms import BullsCowsForm
@@ -12,7 +12,7 @@ size = 4
 
 def current_datetime(request):
     now = datetime.datetime.now()
-    return render_to_response('current_datetime.html', {'current_date': now})
+    return render(request, 'current_datetime.html', {'current_date': now})
 
 def hours_ahead(request, offset):
     offset = int(offset)
@@ -51,7 +51,7 @@ def bulls_cows(request):
             'history': request.session["history"],
             'found': found,
             'error': error})
-        return render_to_response("bulls_cows.html", csrfContext)
+        return render(request, "bulls_cows.html", csrfContext.flatten())
     else:        
         form = BullsCowsForm()
         request.session["choices"] = list(product(digits, repeat=size))
@@ -66,7 +66,7 @@ def bulls_cows(request):
                 break      
         request.session["answers"].append(request.session["ans"])        
         csrfContext = RequestContext(request, {'form': form, 'ans': request.session["ans"]})
-        return render_to_response('bulls_cows.html', csrfContext)
+        return render(request, 'bulls_cows.html', csrfContext.flatten())
     
 def highestPointers(possibility, guess):
     flag = False
