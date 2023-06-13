@@ -1,0 +1,1 @@
+web: gunicorn bullsAndCows.wsgi --log-file
