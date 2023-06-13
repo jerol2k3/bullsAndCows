@@ -1,1 +1,1 @@
-web: gunicorn bullsAndCows.wsgi --log-file -
+web: gunicorn bullsAndCows.wsgi:application --log-file - --log-level debug
